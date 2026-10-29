@@ -24,7 +24,7 @@ IChatClient chatClient = provider switch
 };
 
 AIAgent agent = chatClient.AsAIAgent(
-    name: "AssistenteLhama",
+    name: "AssistenteOllama",
     instructions: "Você é um assistente prestativo que responde em português do Brasil. " +
                   "Use as ferramentas disponíveis sempre que a pergunta depender de dados delas.",
     tools:

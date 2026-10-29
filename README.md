@@ -1,4 +1,4 @@
-# Estudo IA Lhama
+# Estudo IA Ollama
 
 Estudo comparativo entre o Ollama (LLM local) e LLMs em nuvem (OpenAI, Gemini), com foco em agentes em C# .NET para análise de documentos estruturados (XML, JSON, TXT, Excel) com regras de negócio e busca vetorial no pgvector.
 
