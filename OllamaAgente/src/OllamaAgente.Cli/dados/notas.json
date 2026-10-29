@@ -1,0 +1,84 @@
+[
+  {
+    "numero": "NF-1001",
+    "fornecedor": { "razaoSocial": "Tech Distribuidora Ltda", "cnpj": "11.222.333/0001-81" },
+    "dataEmissao": "2026-09-15",
+    "valorDeclarado": 9800.00,
+    "aprovadaPelaDiretoria": false,
+    "itens": [
+      { "descricao": "Notebook 14 polegadas", "quantidade": 2, "valorUnitario": 4500.00 },
+      { "descricao": "Mouse sem fio", "quantidade": 10, "valorUnitario": 80.00 }
+    ]
+  },
+  {
+    "numero": "NF-1002",
+    "fornecedor": { "razaoSocial": "Papelaria Central ME", "cnpj": "12.345.678/0001-00" },
+    "dataEmissao": "2026-09-20",
+    "valorDeclarado": 1445.00,
+    "aprovadaPelaDiretoria": false,
+    "itens": [
+      { "descricao": "Resma de papel A4", "quantidade": 50, "valorUnitario": 28.90 }
+    ]
+  },
+  {
+    "numero": "NF-1003",
+    "fornecedor": { "razaoSocial": "Servidores Brasil SA", "cnpj": "45.678.912/0001-55" },
+    "dataEmissao": "2026-10-01",
+    "valorDeclarado": 66000.00,
+    "aprovadaPelaDiretoria": false,
+    "itens": [
+      { "descricao": "Servidor rack 2U", "quantidade": 3, "valorUnitario": 22000.00 }
+    ]
+  },
+  {
+    "numero": "NF-1004",
+    "fornecedor": { "razaoSocial": "Móveis Corporativos Ltda", "cnpj": "98.765.432/0001-98" },
+    "dataEmissao": "2026-10-05",
+    "valorDeclarado": 27500.00,
+    "aprovadaPelaDiretoria": false,
+    "itens": [
+      { "descricao": "Cadeira ergonômica", "quantidade": 20, "valorUnitario": 750.00 },
+      { "descricao": "Mesa de escritório", "quantidade": 10, "valorUnitario": 1200.00 }
+    ]
+  },
+  {
+    "numero": "NF-1005",
+    "fornecedor": { "razaoSocial": "Tech Distribuidora Ltda", "cnpj": "11.222.333/0001-81" },
+    "dataEmissao": "2027-12-20",
+    "valorDeclarado": 6500.00,
+    "aprovadaPelaDiretoria": false,
+    "itens": [
+      { "descricao": "Monitor 27 polegadas", "quantidade": 5, "valorUnitario": 1300.00 }
+    ]
+  },
+  {
+    "numero": "NF-1006",
+    "fornecedor": { "razaoSocial": "Servidores Brasil SA", "cnpj": "45.678.912/0001-55" },
+    "dataEmissao": "2026-10-10",
+    "valorDeclarado": 70000.00,
+    "aprovadaPelaDiretoria": true,
+    "itens": [
+      { "descricao": "Storage 100 TB", "quantidade": 1, "valorUnitario": 70000.00 }
+    ]
+  },
+  {
+    "numero": "NF-1007",
+    "fornecedor": { "razaoSocial": "Nova Logística Digital", "cnpj": "12.ABC.345/01DE-35" },
+    "dataEmissao": "2026-10-20",
+    "valorDeclarado": 1400.00,
+    "aprovadaPelaDiretoria": false,
+    "itens": [
+      { "descricao": "Frete expresso", "quantidade": 4, "valorUnitario": 350.00 }
+    ]
+  },
+  {
+    "numero": "NF-1008",
+    "fornecedor": { "razaoSocial": "Consultoria Alfa", "cnpj": "33.445.566/0001-80" },
+    "dataEmissao": "2026-10-22",
+    "valorDeclarado": 61000.00,
+    "aprovadaPelaDiretoria": false,
+    "itens": [
+      { "descricao": "Horas de consultoria", "quantidade": 100, "valorUnitario": 600.00 }
+    ]
+  }
+]

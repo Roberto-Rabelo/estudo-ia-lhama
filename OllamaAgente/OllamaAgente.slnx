@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/OllamaAgente.Application/OllamaAgente.Application.csproj" />
+    <Project Path="src/OllamaAgente.Cli/OllamaAgente.Cli.csproj" />
+    <Project Path="src/OllamaAgente.Domain/OllamaAgente.Domain.csproj" />
+    <Project Path="src/OllamaAgente.Infrastructure/OllamaAgente.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/OllamaAgente.Domain.Tests/OllamaAgente.Domain.Tests.csproj" />
+  </Folder>
+</Solution>

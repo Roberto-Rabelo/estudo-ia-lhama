@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<style>
+  :root {
+    --ink: #14213d;
+    --muted: #5c677d;
+    --line: #d9dee7;
+    --bg: #f7f8fa;
+    --local: #0f766e;
+    --local-soft: #e6f4f2;
+    --cloud: #1d4ed8;
+    --cloud-soft: #e8eefc;
+    --code: #7c3aed;
+    --code-soft: #f1ebfd;
+    --warn: #b45309;
+    --warn-soft: #fdf3e6;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    width: 1600px;
+    background: #ffffff;
+    color: var(--ink);
+    font-family: -apple-system, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+    padding: 56px 64px 48px;
+  }
+  h1 { font-size: 40px; line-height: 1.15; letter-spacing: -0.5px; }
+  h1 span { color: var(--local); }
+  .subtitle { font-size: 20px; color: var(--muted); margin-top: 10px; }
+  h2 {
+    font-size: 15px; text-transform: uppercase; letter-spacing: 1.6px;
+    color: var(--muted); margin-bottom: 16px; font-weight: 700;
+  }
+  section { margin-top: 40px; }
+
+  .verdict {
+    margin-top: 32px; padding: 24px 28px; border-radius: 12px;
+    background: var(--local-soft); border-left: 6px solid var(--local);
+    display: grid; grid-template-columns: 300px 1fr; gap: 24px; align-items: center;
+  }
+  .verdict .tag { font-size: 14px; font-weight: 700; color: var(--local); text-transform: uppercase; letter-spacing: 1.4px; }
+  .verdict .big { font-size: 30px; font-weight: 800; color: var(--local); margin-top: 4px; }
+  .verdict p { font-size: 19px; line-height: 1.5; }
+
+  .pipeline { display: flex; align-items: stretch; gap: 0; }
+  .step {
+    flex: 1; border: 1.5px solid var(--line); border-radius: 10px; padding: 16px 14px;
+    background: var(--bg); text-align: center; display: flex; flex-direction: column; justify-content: center;
+  }
+  .step b { display: block; font-size: 17px; margin-bottom: 6px; }
+  .step small { font-size: 13.5px; color: var(--muted); line-height: 1.4; }
+  .step.code { background: var(--code-soft); border-color: #d6c6f7; }
+  .step.local { background: var(--local-soft); border-color: #b5ddd7; }
+  .step.db { background: #fff; border-color: var(--ink); }
+  .arrow { width: 34px; display: flex; align-items: center; justify-content: center; color: var(--muted); font-size: 24px; }
+  .legend { display: flex; gap: 22px; margin-top: 12px; font-size: 14px; color: var(--muted); }
+  .legend i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
+
+  .split { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+  .who { border-radius: 12px; padding: 20px 22px; }
+  .who h3 { font-size: 20px; margin-bottom: 4px; }
+  .who .role { font-size: 14px; font-weight: 600; margin-bottom: 12px; }
+  .who ul { list-style: none; }
+  .who li { font-size: 16px; line-height: 1.45; padding-left: 16px; position: relative; margin-bottom: 6px; }
+  .who li::before { content: ""; position: absolute; left: 0; top: 9px; width: 6px; height: 6px; border-radius: 50%; background: currentColor; opacity: .55; }
+  .who.code { background: var(--code-soft); } .who.code h3, .who.code .role { color: var(--code); }
+  .who.vec { background: var(--bg); border: 1.5px solid var(--line); } .who.vec .role { color: var(--muted); }
+  .who.llm { background: var(--local-soft); } .who.llm h3, .who.llm .role { color: var(--local); }
+
+  .vs { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+  .col { border-radius: 12px; border: 1.5px solid var(--line); overflow: hidden; }
+  .col header { padding: 16px 22px; color: #fff; display: flex; justify-content: space-between; align-items: baseline; }
+  .col.local header { background: var(--local); }
+  .col.cloud header { background: var(--cloud); }
+  .col header b { font-size: 22px; }
+  .col header span { font-size: 14px; opacity: .9; }
+  .col .body { display: grid; grid-template-columns: 1fr 1fr; }
+  .col .body > div { padding: 16px 22px 18px; }
+  .col .body > div + div { border-left: 1.5px solid var(--line); }
+  .col h4 { font-size: 14px; text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 10px; }
+  .pro h4 { color: #15803d; } .con h4 { color: #b91c1c; }
+  .col ul { list-style: none; }
+  .col li { font-size: 15.5px; line-height: 1.4; margin-bottom: 7px; padding-left: 18px; position: relative; }
+  .pro li::before { content: "+"; position: absolute; left: 0; color: #15803d; font-weight: 800; }
+  .con li::before { content: "–"; position: absolute; left: 0; color: #b91c1c; font-weight: 800; }
+
+  .two { display: grid; grid-template-columns: 1.05fr 1fr; gap: 28px; }
+  .stack { display: flex; flex-direction: column; gap: 8px; }
+  .layer { border-radius: 8px; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; font-size: 16px; border: 1.5px solid var(--line); }
+  .layer b { font-size: 16.5px; }
+  .layer span { color: var(--muted); font-size: 14px; }
+  .layer.top { background: var(--ink); color: #fff; border-color: var(--ink); }
+  .layer.top span { color: #c9d1e0; }
+  .layer.mid { background: var(--bg); }
+  .providers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .providers div { border-radius: 8px; padding: 11px 12px; text-align: center; font-size: 15px; font-weight: 600; }
+  .providers .o { background: var(--local-soft); color: var(--local); }
+  .providers .c { background: var(--cloud-soft); color: var(--cloud); }
+  .note { font-size: 14.5px; color: var(--muted); margin-top: 10px; line-height: 1.45; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 15.5px; }
+  th { text-align: left; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); padding: 8px 10px; border-bottom: 2px solid var(--line); }
+  td { padding: 9px 10px; border-bottom: 1px solid var(--line); }
+  td.l { color: var(--local); font-weight: 700; } td.c { color: var(--cloud); font-weight: 700; } td.n { color: var(--code); font-weight: 700; }
+
+  .warn { margin-top: 14px; padding: 14px 18px; border-radius: 10px; background: var(--warn-soft); border-left: 5px solid var(--warn); font-size: 15px; line-height: 1.45; }
+  .warn b { color: var(--warn); }
+
+  footer { margin-top: 40px; padding-top: 18px; border-top: 1.5px solid var(--line); display: flex; justify-content: space-between; font-size: 14px; color: var(--muted); }
+</style>
+</head>
+<body>
+
+<h1>Ollama <span>(LLM local)</span> vs. OpenAI e Gemini</h1>
+<div class="subtitle">Agentes em C# .NET para análise de documentos estruturados (XML, JSON, TXT, Excel) com regras definidas e busca vetorial no pgvector</div>
+
+<div class="verdict">
+  <div>
+    <div class="tag">Recomendação</div>
+    <div class="big">Comece com Ollama</div>
+  </div>
+  <p>Com documentos estruturados e regras bem estabelecidas, <b>parsing, regras e cálculos ficam em código C# e SQL</b>. O LLM só entende a pergunta, chama as ferramentas e explica o resultado. Para isso, um modelo local de 8B a 14B é suficiente, e os dados não saem da empresa.</p>
+</div>
+
+<section>
+  <h2>Arquitetura de referência</h2>
+  <div class="pipeline">
+    <div class="step"><b>Documentos</b><small>XML · JSON · TXT · Excel</small></div>
+    <div class="arrow">→</div>
+    <div class="step code"><b>Parsers C#</b><small>XDocument · System.Text.Json · layout TXT · ClosedXML</small></div>
+    <div class="arrow">→</div>
+    <div class="step code"><b>Validação + Regras</b><small>XSD · JSON Schema · regras em C#</small></div>
+    <div class="arrow">→</div>
+    <div class="step local"><b>Embedding</b><small>texto descritivo por registro · Ollama bge-m3</small></div>
+    <div class="arrow">→</div>
+    <div class="step db"><b>PostgreSQL + pgvector</b><small>colunas · jsonb · violações · vector(1024)</small></div>
+    <div class="arrow">→</div>
+    <div class="step local"><b>Agente .NET</b><small>busca híbrida SQL + vetor · Ollama qwen3:8b</small></div>
+    <div class="arrow">→</div>
+    <div class="step"><b>Resposta tipada</b><small>JSON → objeto C#</small></div>
+  </div>
+  <div class="legend">
+    <span><i style="background:#d6c6f7"></i>Código determinístico</span>
+    <span><i style="background:#b5ddd7"></i>IA local (Ollama)</span>
+    <span><i style="background:#fff;border:1.5px solid #14213d"></i>Banco de dados</span>
+  </div>
+</section>
+
+<section>
+  <h2>Quem faz o quê</h2>
+  <div class="split">
+    <div class="who code">
+      <h3>Código C# e SQL</h3>
+      <div class="role">Determinístico e auditável</div>
+      <ul>
+        <li>Ler e validar XML, JSON, TXT, Excel</li>
+        <li>Aplicar as regras de negócio</li>
+        <li>Somar, agregar e comparar valores</li>
+        <li>Buscar valor exato: ID, CNPJ, data</li>
+      </ul>
+    </div>
+    <div class="who vec">
+      <h3>Embeddings + pgvector</h3>
+      <div class="role">Busca por significado</div>
+      <ul>
+        <li>Descrições e observações em texto livre</li>
+        <li>Registros semelhantes entre si</li>
+        <li>Texto das normas e manuais de regras</li>
+        <li>Um modelo só: trocar exige reindexar tudo</li>
+      </ul>
+    </div>
+    <div class="who llm">
+      <h3>LLM</h3>
+      <div class="role">Linguagem natural</div>
+      <ul>
+        <li>Entender a pergunta do usuário</li>
+        <li>Escolher a ferramenta e os filtros</li>
+        <li>Explicar violações citando a regra</li>
+        <li>Nunca fazer contas nem decidir regras</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Vantagens e desvantagens</h2>
+  <div class="vs">
+    <div class="col local">
+      <header><b>Ollama</b><span>modelos abertos na sua máquina</span></header>
+      <div class="body">
+        <div class="pro"><h4>Vantagens</h4><ul>
+          <li>Dados não saem da rede (LGPD)</li>
+          <li>Custo zero por token, ideal para ingestão em volume</li>
+          <li>Funciona offline</li>
+          <li>Versão do modelo fixa e reprodutível</li>
+        </ul></div>
+        <div class="con"><h4>Desvantagens</h4><ul>
+          <li>Raciocínio abaixo dos modelos de ponta</li>
+          <li>Exige GPU ou Mac com bastante memória</li>
+          <li>Contexto menor (num_ctx)</li>
+          <li>Você opera a infraestrutura</li>
+        </ul></div>
+      </div>
+    </div>
+    <div class="col cloud">
+      <header><b>OpenAI · Gemini</b><span>modelos proprietários na nuvem</span></header>
+      <div class="body">
+        <div class="pro"><h4>Vantagens</h4><ul>
+          <li>Raciocínio e tool calling de ponta</li>
+          <li>Zero infraestrutura, escala elástica, SLA</li>
+          <li>Contexto de centenas de milhares de tokens</li>
+          <li>Multimodal: imagem, áudio, vídeo</li>
+        </ul></div>
+        <div class="con"><h4>Desvantagens</h4><ul>
+          <li>Custo por token cresce com o volume</li>
+          <li>Dados saem da empresa</li>
+          <li>Depende de internet e rate limits</li>
+          <li>Modelos mudam ou são descontinuados</li>
+        </ul></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="two">
+  <div>
+    <h2>Suporte no C# .NET: o mesmo código para os três</h2>
+    <div class="stack">
+      <div class="layer top"><b>Microsoft Agent Framework</b><span>Microsoft.Agents.AI 1.26 · agentes, ferramentas, sessões</span></div>
+      <div class="layer mid"><b>Microsoft.Extensions.AI</b><span>10.11 · IChatClient · IEmbeddingGenerator</span></div>
+      <div class="providers">
+        <div class="o">OllamaSharp 5.5</div>
+        <div class="c">OpenAI 2.14</div>
+        <div class="c">Google.GenAI 1.27</div>
+      </div>
+      <div class="layer mid"><b>Npgsql 10 + Pgvector 0.3</b><span>ClosedXML · System.Xml · System.Text.Json</span></div>
+    </div>
+    <div class="note">Trocar de provedor é trocar uma linha: o cliente que implementa IChatClient / IEmbeddingGenerator. Agente, ferramentas, regras e banco não mudam.</div>
+  </div>
+  <div>
+    <h2>Quando usar cada um</h2>
+    <table>
+      <tr><th>Situação</th><th>Usar</th></tr>
+      <tr><td>Embeddings na ingestão</td><td class="l">Ollama</td></tr>
+      <tr><td>Perguntas sobre os registros</td><td class="l">Ollama</td></tr>
+      <tr><td>Dados fiscais, financeiros, pessoais</td><td class="l">Ollama</td></tr>
+      <tr><td>Validar regras, somar, agregar</td><td class="n">Código / SQL</td></tr>
+      <tr><td>Raciocínio cruzando muitos documentos</td><td class="c">Nuvem</td></tr>
+      <tr><td>Documento gigante inteiro no prompt</td><td class="c">Gemini</td></tr>
+      <tr><td>Sem hardware ou time de infraestrutura</td><td class="c">Nuvem</td></tr>
+    </table>
+    <div class="warn"><b>pgvector:</b> índices HNSW aceitam até 2000 dimensões em <i>vector</i> (4000 em <i>halfvec</i>). bge-m3 = 1024 · text-embedding-3-small = 1536 · modelos de 3072 precisam reduzir dimensões.</div>
+  </div>
+</section>
+
+<footer>
+  <span>Estudo IA Lhama · Ollama vs. LLMs em nuvem com C# .NET</span>
+  <span>Versões verificadas no NuGet em 28/10/2026</span>
+</footer>
+
+</body>
+</html>
